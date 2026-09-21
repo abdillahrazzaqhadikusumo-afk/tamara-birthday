@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory Lane</title>
+<style>
+  html { scroll-snap-type: y mandatory; }
+  body { margin: 0; font-family: Georgia, serif; background: #1b0b22; color: #f6e7ff; }
+  .memory {
+    min-height: 100svh; scroll-snap-align: start;
+    display: grid; place-items: center; padding: 2rem; text-align: center;
+    opacity: 0; transition: opacity 1s;
+  }
+  .memory.seen { opacity: 1; }
+  .memory img { max-width: 80%; border-radius: 8px; }
+</style>
+</head>
+<body>
+  <section class="memory">
+    <div>
+      <p>[Date]</p>
+      <img src="images/first-date.jpg" alt="Our first date">
+      <h2>The day we met</h2>
+    </div>
+  </section>
+
+  <!-- Copy the whole <section> above for each new memory -->
+
+  <script>
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('seen')),
+      { threshold: 0.4 }
+    );
+    document.querySelectorAll('.memory').forEach((m) => io.observe(m));
+  </script>
+</body>
+</html>
