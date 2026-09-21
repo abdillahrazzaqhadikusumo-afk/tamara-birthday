@@ -2,37 +2,643 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Memory Lane</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  html { scroll-snap-type: y mandatory; }
-  body { margin: 0; font-family: Georgia, serif; background: #1b0b22; color: #f6e7ff; }
-  .memory {
-    min-height: 100svh; scroll-snap-align: start;
-    display: grid; place-items: center; padding: 2rem; text-align: center;
-    opacity: 0; transition: opacity 1s;
+  :root {
+    --night: #0C1024;
+    --night-ink: #F3E6C4;
+    --lit-bg: #E9DAB4;
+    --lit-ink: #2B1A12;
+    --paper: #F7EDD3;
+    --accent: #8C1C2C;
+    --gold: #C9982F;
+    --flame: #FFB627;
+    --pewter: #9AA3B5;
+    --cake1: #8C1C2C;
+    --cake2: #D9A93A;
+    --cake3: #F6EAD0;
+    --display: "Cinzel Decorative", "Trajan Pro", Georgia, "Times New Roman", serif;
+    --body: "IM Fell English", Georgia, "Times New Roman", serif;
+    --bg: var(--night);
+    --ink: var(--night-ink);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  .memory.seen { opacity: 1; }
-  .memory img { max-width: 80%; border-radius: 8px; }
+  :root.lit { --bg: var(--lit-bg); --ink: var(--lit-ink); }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+  *, *::before, *::after { box-sizing: inherit; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    transition: background-color 1.6s ease, color 1.6s ease;
+  }
+  :focus-visible { outline: 3px solid var(--flame); outline-offset: 4px; }
+
+  /* ---------- Opening: candlelit hall ---------- */
+  .stage {
+    position: relative;
+    overflow: hidden;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    text-align: center;
+    padding: 3rem max(1.25rem, env(safe-area-inset-right, 0px)) 2rem max(1.25rem, env(safe-area-inset-left, 0px));
+  }
+  .stage > *:not(.ceiling) { position: relative; z-index: 1; }
+  #title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 8.5vw, 3.6rem);
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .ceiling { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+  .fc {
+    position: absolute;
+    width: 12px;
+    height: 64px;
+    scale: var(--s, 1);
+    transform-origin: 50% 100%;
+    animation: float var(--dur, 7s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+  .fc::after {
+    content: "";
+    position: absolute; left: 0; bottom: 0;
+    width: 12px; height: 42px;
+    background: #F3E6C4;
+    border-radius: 3px 3px 2px 2px;
+  }
+  .fc i {
+    position: absolute; left: 50%; top: 6px;
+    width: 9px; height: 18px; margin-left: -4.5px;
+    background: var(--flame);
+    border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+    box-shadow: 0 0 16px 7px rgba(255, 182, 39, .45);
+    transform-origin: 50% 100%;
+    animation: flicker 1.4s ease-in-out infinite;
+    transition: box-shadow 1.6s ease;
+  }
+  :root.lit .fc i { box-shadow: 0 0 8px 3px rgba(255, 182, 39, .3); }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+
+  .cake {
+    background: none; border: 0; padding: 0; margin: 0;
+    width: min(78vw, 340px);
+    cursor: pointer;
+    display: block;
+    border-radius: 24px;
+    -webkit-tap-highlight-color: transparent;
+    color: inherit;
+  }
+  .cake svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .flame { transform-box: fill-box; transform-origin: 50% 100%; animation: flicker 1.6s ease-in-out infinite; transition: opacity .25s ease; }
+  .glow { transition: opacity .4s ease; }
+  :root.lit #cake .flame, :root.lit #cake .glow { opacity: 0; }
+  .smoke { opacity: 0; fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+  :root.lit .smoke { animation: smoke 2s ease-out forwards; }
+  @keyframes flicker {
+    0%, 100% { transform: scale(1, 1) rotate(-1deg); }
+    35% { transform: scale(.94, 1.06) rotate(1.5deg); }
+    70% { transform: scale(1.04, .96) rotate(-1deg); }
+  }
+  @keyframes smoke {
+    0% { opacity: .6; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-26px); }
+  }
+
+  /* ---------- After the candles ---------- */
+  #reveal { opacity: 0; transition: opacity 1.6s ease .6s; }
+  #reveal[hidden] { display: none; }
+  #reveal.in { opacity: 1; }
+  .wrap {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  }
+  .block { padding-top: clamp(3rem, 9vw, 5.5rem); padding-bottom: clamp(1.5rem, 5vw, 3rem); }
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 6vw, 2.2rem);
+    line-height: 1.2;
+    margin: 0 0 2.25rem;
+    text-wrap: balance;
+  }
+
+  /* ---------- Memory lane ---------- */
+  .lane {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .lane::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 10px;
+    border-left: 3px dashed var(--accent);
+  }
+  .lane li {
+    position: relative;
+    padding: 0 0 3.75rem 2.75rem;
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .9s ease, transform .9s ease;
+  }
+  .lane li.seen { opacity: 1; transform: none; }
+  .lane li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: .3rem;
+    width: 23px; height: 23px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 5px var(--bg);
+  }
+  .when { display: block; font-family: var(--display); font-weight: 400; font-size: .95rem; color: var(--accent); margin-bottom: .15rem; }
+  .lane h3 { font-family: var(--display); font-weight: 700; font-size: 1.3rem; line-height: 1.25; margin: 0 0 .4rem; }
+  .lane p { margin: 0; }
+  .pola {
+    background: var(--paper);
+    padding: .6rem;
+    border-radius: 3px;
+    box-shadow: 0 8px 22px rgba(20, 8, 4, .25);
+    max-width: 20rem;
+    margin: .9rem 0 1.1rem;
+    transform: rotate(-1.5deg);
+  }
+  .lane li:nth-child(even) .pola { transform: rotate(1.5deg); }
+
+  .frame {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: .75rem;
+    font-size: .95rem;
+    line-height: 1.3;
+    background: var(--lit-bg);
+    border: 2px dashed var(--accent);
+    color: var(--ink);
+  }
+  .frame.has-photo { padding: 0; border: 0; }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  @media (min-width: 52rem) {
+    .wrap { max-width: 52rem; }
+    .lane::before { left: 50%; margin-left: -1.5px; }
+    .lane li { width: 50%; padding: 0 3rem 4rem 0; text-align: right; }
+    .lane li::before { left: auto; right: -11.5px; }
+    .lane li:nth-child(even) { margin-left: 50%; padding: 0 0 4rem 3rem; text-align: left; }
+    .lane li:nth-child(even)::before { right: auto; left: -11.5px; }
+    .lane li:nth-child(odd) .pola { margin-left: auto; }
+  }
+
+  /* ---------- Paragraph on parchment ---------- */
+  .letter {
+    position: relative;
+    background: var(--paper);
+    padding: 2rem 1.6rem 3.4rem;
+    border-radius: 4px;
+    box-shadow: 0 8px 22px rgba(20, 8, 4, .25);
+    max-width: 38rem;
+    margin: 0 auto;
+  }
+  .letter p { margin: 0; white-space: pre-line; font-style: italic; font-size: 1.25rem; color: var(--lit-ink); }
+  .seal {
+    position: absolute;
+    left: 50%; bottom: -1.7rem;
+    transform: translateX(-50%);
+    width: 3.4rem; height: 3.4rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #B3273B, #7A1524);
+    color: #F3E6C4;
+    display: grid; place-items: center;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .35);
+  }
+
+  /* ---------- One more thing ---------- */
+  .finish { text-align: center; padding-bottom: 5rem; }
+  .cupcake {
+    display: block;
+    margin: 0 auto;
+    background: none; border: 0; padding: 0;
+    width: min(46vw, 190px);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 20px;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .cupcake svg { width: 100%; height: auto; display: block; overflow: visible; animation: bob 3.2s ease-in-out infinite; }
+  .cupcake.gone { opacity: 0; transform: scale(.85); }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-7px) rotate(1.5deg); }
+  }
+
+  .surprise { opacity: 0; transform: scale(.94); transition: opacity .7s ease, transform .7s ease; }
+  .surprise[hidden] { display: none; }
+  .surprise.open { opacity: 1; transform: none; }
+  .big {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(2.6rem, 14vw, 5.5rem);
+    line-height: 1;
+    color: var(--accent);
+    margin: 0;
+  }
+  .big span { display: block; }
+  .big .who { font-size: .55em; margin-top: .35em; }
+  .ring {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .7rem;
+    max-width: 22rem;
+    margin: 2.25rem auto 0;
+    align-items: center;
+  }
+  .mini {
+    background: var(--paper);
+    padding: .3rem;
+    border-radius: 3px;
+    box-shadow: 0 5px 14px rgba(20, 8, 4, .25);
+    aspect-ratio: 1;
+    transform: rotate(-3deg);
+  }
+  .mini:nth-child(even) { transform: rotate(2.5deg); }
+  .mini .frame { height: 100%; aspect-ratio: auto; padding: 0; font-size: 1rem; border-width: 1.5px; color: var(--accent); }
+  .cake.mid { width: 100%; border-radius: 12px; }
+  .cake.mid svg { transform: scale(1.35); }
+
+  #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flame, .fc, .fc i, .cupcake svg { animation: none; }
+    :root.lit .smoke { animation: none; }
+    body, #reveal, .surprise, .cupcake, .lane li { transition: none; }
+  }
 </style>
 </head>
 <body>
-  <section class="memory">
-    <div>
-      <p>[Date]</p>
-      <img src="images/first-date.jpg" alt="Our first date">
-      <h2>The day we met</h2>
-    </div>
-  </section>
 
-  <!-- Copy the whole <section> above for each new memory -->
+<header class="stage">
+  <div class="ceiling" id="ceiling" aria-hidden="true"></div>
+  <h1 id="title" aria-live="polite">Make a wish.</h1>
+  <button class="cake" id="cake" type="button" aria-label="Blow out the candles">
+    <svg viewBox="0 0 300 300" aria-hidden="true">
+      <defs>
+        <radialGradient id="glow">
+          <stop offset="0" stop-color="#FFB627" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#FFB627" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
 
-  <script>
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('seen')),
-      { threshold: 0.4 }
-    );
-    document.querySelectorAll('.memory').forEach((m) => io.observe(m));
-  </script>
+      <ellipse cx="150" cy="268" rx="128" ry="14" fill="var(--pewter)"/>
+
+      <rect x="40" y="190" width="220" height="72" rx="14" fill="var(--cake1)"/>
+      <rect x="40" y="190" width="220" height="24" rx="12" fill="var(--cake3)"/>
+      <g fill="var(--cake3)">
+        <circle cx="58" cy="214" r="13"/><circle cx="86" cy="214" r="13"/><circle cx="114" cy="214" r="13"/>
+        <circle cx="142" cy="214" r="13"/><circle cx="170" cy="214" r="13"/><circle cx="198" cy="214" r="13"/>
+        <circle cx="226" cy="214" r="13"/><circle cx="246" cy="214" r="13"/>
+      </g>
+
+      <rect x="75" y="130" width="150" height="64" rx="12" fill="var(--cake2)"/>
+      <rect x="75" y="130" width="150" height="22" rx="11" fill="var(--cake3)"/>
+      <g fill="var(--cake3)">
+        <circle cx="90" cy="152" r="12"/><circle cx="114" cy="152" r="12"/><circle cx="138" cy="152" r="12"/>
+        <circle cx="162" cy="152" r="12"/><circle cx="186" cy="152" r="12"/><circle cx="210" cy="152" r="12"/>
+      </g>
+
+      <rect x="116" y="98" width="8" height="34" rx="3" fill="#B3273B"/>
+      <rect x="146" y="98" width="8" height="34" rx="3" fill="#F3E6C4"/>
+      <rect x="176" y="98" width="8" height="34" rx="3" fill="#D9A93A"/>
+      <g stroke="#0C1024" stroke-width="2" stroke-linecap="round">
+        <line x1="120" y1="98" x2="120" y2="92"/><line x1="150" y1="98" x2="150" y2="92"/><line x1="180" y1="98" x2="180" y2="92"/>
+      </g>
+
+      <g class="glow">
+        <circle cx="120" cy="80" r="44" fill="url(#glow)"/>
+        <circle cx="150" cy="80" r="44" fill="url(#glow)"/>
+        <circle cx="180" cy="80" r="44" fill="url(#glow)"/>
+      </g>
+
+      <g transform="translate(120,92)"><g class="flame" style="animation-delay:-.2s">
+        <path d="M0,-28 C9,-15 9,-4 0,0 C-9,-4 -9,-15 0,-28Z" fill="#FFB627"/>
+        <path d="M0,-14 C4,-8 4,-3 0,0 C-4,-3 -4,-8 0,-14Z" fill="#FFF3B0"/>
+      </g></g>
+      <g transform="translate(150,92)"><g class="flame" style="animation-delay:-.7s">
+        <path d="M0,-28 C9,-15 9,-4 0,0 C-9,-4 -9,-15 0,-28Z" fill="#FFB627"/>
+        <path d="M0,-14 C4,-8 4,-3 0,0 C-4,-3 -4,-8 0,-14Z" fill="#FFF3B0"/>
+      </g></g>
+      <g transform="translate(180,92)"><g class="flame" style="animation-delay:-1.1s">
+        <path d="M0,-28 C9,-15 9,-4 0,0 C-9,-4 -9,-15 0,-28Z" fill="#FFB627"/>
+        <path d="M0,-14 C4,-8 4,-3 0,0 C-4,-3 -4,-8 0,-14Z" fill="#FFF3B0"/>
+      </g></g>
+
+      <g transform="translate(120,88)"><path class="smoke" d="M0,0 C-7,-9 7,-15 0,-26"/></g>
+      <g transform="translate(150,88)"><path class="smoke" d="M0,0 C-7,-9 7,-15 0,-26"/></g>
+      <g transform="translate(180,88)"><path class="smoke" d="M0,0 C-7,-9 7,-15 0,-26"/></g>
+    </svg>
+  </button>
+</header>
+
+<main id="reveal" hidden>
+  <div class="wrap">
+
+    <section class="block">
+      <h2>Memory lane</h2>
+      <ol class="lane" id="lane"></ol>
+    </section>
+
+    <section class="block">
+      <div class="letter">
+        <p id="paragraph"></p>
+        <div class="seal" id="seal" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="block finish" id="finish">
+      <h2>One more thing</h2>
+
+      <button class="cupcake" id="cupcake" type="button" aria-label="Open your surprise">
+        <svg viewBox="0 0 200 220" aria-hidden="true">
+          <path d="M46,124 L154,124 L141,198 Q139,208 129,208 L71,208 Q61,208 59,198 Z" fill="var(--cake1)"/>
+          <g stroke="#F6EAD0" stroke-opacity=".35" stroke-width="3" stroke-linecap="round">
+            <line x1="68" y1="134" x2="74" y2="200"/><line x1="86" y1="134" x2="89" y2="202"/>
+            <line x1="104" y1="134" x2="104" y2="203"/><line x1="122" y1="134" x2="119" y2="202"/>
+            <line x1="140" y1="134" x2="134" y2="200"/>
+          </g>
+          <ellipse cx="100" cy="120" rx="64" ry="22" fill="var(--cake3)"/>
+          <ellipse cx="100" cy="98" rx="50" ry="20" fill="var(--cake2)"/>
+          <ellipse cx="100" cy="78" rx="34" ry="17" fill="var(--cake3)"/>
+          <circle cx="100" cy="64" r="11" fill="var(--cake2)"/>
+          <g fill="#B3273B"><rect x="74" y="112" width="8" height="3" rx="1.5" transform="rotate(-20 78 113)"/><rect x="122" y="106" width="8" height="3" rx="1.5" transform="rotate(25 126 107)"/></g>
+          <g fill="#0C1024" fill-opacity=".55"><rect x="90" y="124" width="8" height="3" rx="1.5" transform="rotate(15 94 125)"/><rect x="110" y="92" width="8" height="3" rx="1.5" transform="rotate(-30 114 93)"/></g>
+          <rect x="96" y="32" width="8" height="30" rx="3" fill="#B3273B"/>
+          <circle cx="100" cy="18" r="30" fill="url(#glow)"/>
+          <g transform="translate(100,32)"><g class="flame">
+            <path d="M0,-24 C8,-13 8,-3 0,0 C-8,-3 -8,-13 0,-24Z" fill="#FFB627"/>
+            <path d="M0,-12 C3.5,-7 3.5,-3 0,0 C-3.5,-3 -3.5,-7 0,-12Z" fill="#FFF3B0"/>
+          </g></g>
+        </svg>
+      </button>
+
+      <div class="surprise" id="surprise" hidden>
+        <h3 class="big" id="big"></h3>
+        <div class="ring" id="ring"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<template id="cakeTpl">
+  <svg viewBox="0 0 300 300" aria-hidden="true">
+    <ellipse cx="150" cy="268" rx="128" ry="14" fill="var(--pewter)"/>
+    <rect x="40" y="190" width="220" height="72" rx="14" fill="var(--cake1)"/>
+    <rect x="40" y="190" width="220" height="24" rx="12" fill="var(--cake3)"/>
+    <g fill="var(--cake3)">
+      <circle cx="58" cy="214" r="13"/><circle cx="86" cy="214" r="13"/><circle cx="114" cy="214" r="13"/>
+      <circle cx="142" cy="214" r="13"/><circle cx="170" cy="214" r="13"/><circle cx="198" cy="214" r="13"/>
+      <circle cx="226" cy="214" r="13"/><circle cx="246" cy="214" r="13"/>
+    </g>
+    <rect x="75" y="130" width="150" height="64" rx="12" fill="var(--cake2)"/>
+    <rect x="75" y="130" width="150" height="22" rx="11" fill="var(--cake3)"/>
+    <g fill="var(--cake3)">
+      <circle cx="90" cy="152" r="12"/><circle cx="114" cy="152" r="12"/><circle cx="138" cy="152" r="12"/>
+      <circle cx="162" cy="152" r="12"/><circle cx="186" cy="152" r="12"/><circle cx="210" cy="152" r="12"/>
+    </g>
+    <rect x="116" y="98" width="8" height="34" rx="3" fill="#B3273B"/>
+    <rect x="146" y="98" width="8" height="34" rx="3" fill="#F3E6C4"/>
+    <rect x="176" y="98" width="8" height="34" rx="3" fill="#D9A93A"/>
+    <g class="glow">
+      <circle cx="120" cy="80" r="44" fill="url(#glow)"/>
+      <circle cx="150" cy="80" r="44" fill="url(#glow)"/>
+      <circle cx="180" cy="80" r="44" fill="url(#glow)"/>
+    </g>
+    <g transform="translate(120,92)"><g class="flame" style="animation-delay:-.3s">
+      <path d="M0,-28 C9,-15 9,-4 0,0 C-9,-4 -9,-15 0,-28Z" fill="#FFB627"/>
+      <path d="M0,-14 C4,-8 4,-3 0,0 C-4,-3 -4,-8 0,-14Z" fill="#FFF3B0"/>
+    </g></g>
+    <g transform="translate(150,92)"><g class="flame" style="animation-delay:-.8s">
+      <path d="M0,-28 C9,-15 9,-4 0,0 C-9,-4 -9,-15 0,-28Z" fill="#FFB627"/>
+      <path d="M0,-14 C4,-8 4,-3 0,0 C-4,-3 -4,-8 0,-14Z" fill="#FFF3B0"/>
+    </g></g>
+    <g transform="translate(180,92)"><g class="flame" style="animation-delay:-1.2s">
+      <path d="M0,-28 C9,-15 9,-4 0,0 C-9,-4 -9,-15 0,-28Z" fill="#FFB627"/>
+      <path d="M0,-14 C4,-8 4,-3 0,0 C-4,-3 -4,-8 0,-14Z" fill="#FFF3B0"/>
+    </g></g>
+  </svg>
+</template>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+  /* =====================================================
+     EDIT THIS PART. Change the words inside the quotes.
+     PHOTOS: upload them to the same place as this file and
+     name them photo1, photo2 ... and plushie1 ... plushie8
+     (.jpg, .jpeg or .png all work). Until a photo exists,
+     you'll see a dashed placeholder telling you its name.
+     ===================================================== */
+  const CONFIG = {
+    name: "Tamara",
+
+    memories: [
+      { photo: "photo1", date: "[Date]", title: "The day we met",            text: "[Write a sentence or two about this memory.]" },
+      { photo: "photo2", date: "[Date]", title: "Our first real date",       text: "[Write a sentence or two about this memory.]" },
+      { photo: "photo3", date: "[Date]", title: "A night we still laugh about", text: "[Write a sentence or two about this memory.]" },
+      { photo: "photo4", date: "[Date]", title: "A trip I'll never forget",  text: "[Write a sentence or two about this memory.]" },
+      { photo: "photo5", date: "[Date]", title: "The moment I knew",         text: "[Write a sentence or two about this memory.]" },
+      { photo: "photo6", date: "[Date]", title: "Right now",                 text: "[Write a sentence or two about this memory.]" }
+    ],
+
+    paragraph: "[Your paragraph goes here. Write what you really want to say to her. A few honest sentences beat a perfect speech.]"
+  };
+  /* ===================================================== */
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.title = "Happy Birthday, " + CONFIG.name;
+  $('title').textContent = "Make a wish, " + CONFIG.name + ".";
+
+  /* Look for a photo under a few common file endings. Calls back only if one loads. */
+  function probe(base, onFound) {
+    const exts = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG'];
+    let i = 0;
+    const img = new Image();
+    img.onload = () => onFound(img);
+    img.onerror = () => { i++; if (i < exts.length) img.src = base + '.' + exts[i]; };
+    img.src = base + '.' + exts[0];
+  }
+  function fillFrame(frame, img, alt) {
+    img.alt = alt;
+    frame.className = 'frame has-photo';
+    frame.replaceChildren(img);
+  }
+
+  /* Floating candles */
+  const candles = [
+    { l: 6, t: 6, s: .8, d: 7.5, w: 0 }, { l: 24, t: 2, s: 1, d: 6.5, w: -2 },
+    { l: 47, t: 9, s: .7, d: 8, w: -4 }, { l: 68, t: 3, s: 1.05, d: 7, w: -1 },
+    { l: 88, t: 8, s: .85, d: 6.8, w: -3 }, { l: 14, t: 20, s: .6, d: 8.5, w: -5 },
+    { l: 82, t: 24, s: .65, d: 7.8, w: -2.5 }
+  ];
+  $('ceiling').innerHTML = candles.map((c) =>
+    `<div class="fc" style="left:${c.l}%;top:${c.t}%;--s:${c.s};--dur:${c.d}s;--del:${c.w}s"><i></i></div>`
+  ).join('');
+
+  /* Memory lane */
+  const lane = $('lane');
+  CONFIG.memories.forEach((m) => {
+    const li = document.createElement('li');
+    li.innerHTML =
+      `<span class="when">${esc(m.date)}</span>` +
+      `<h3>${esc(m.title)}</h3>` +
+      (m.photo ? `<div class="pola"><div class="frame">${esc(m.photo)}.jpg goes here</div></div>` : '') +
+      `<p>${esc(m.text)}</p>`;
+    lane.appendChild(li);
+    if (m.photo) {
+      const frame = li.querySelector('.frame');
+      probe(m.photo, (img) => fillFrame(frame, img, m.title));
+    }
+  });
+
+  /* Fade each memory in as she scrolls */
+  if ('IntersectionObserver' in window && !reduce) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); } });
+    }, { threshold: 0.2 });
+    lane.querySelectorAll('li').forEach((li) => io.observe(li));
+  } else {
+    lane.querySelectorAll('li').forEach((li) => li.classList.add('seen'));
+  }
+
+  $('paragraph').textContent = CONFIG.paragraph;
+  $('seal').textContent = CONFIG.name.charAt(0);
+
+  /* Surprise: 8 plushie frames around a cake (plushie1 ... plushie8) */
+  $('big').innerHTML = `<span>Happy</span><span>Birthday</span><span class="who">${esc(CONFIG.name)}</span>`;
+  const ring = $('ring');
+  for (let n = 1; n <= 8; n++) {
+    if (n === 5) {
+      const b = document.createElement('button');
+      b.className = 'cake mid';
+      b.type = 'button';
+      b.setAttribute('aria-label', 'More confetti');
+      b.innerHTML = $('cakeTpl').innerHTML;
+      b.addEventListener('click', () => burst(0.55));
+      ring.appendChild(b);
+    }
+    const mini = document.createElement('div');
+    mini.className = 'mini';
+    const frame = document.createElement('div');
+    frame.className = 'frame';
+    frame.innerHTML = '&#10022;';
+    mini.appendChild(frame);
+    ring.appendChild(mini);
+    probe('plushie' + n, (img) => fillFrame(frame, img, 'A plushie'));
+  }
+
+  /* Confetti */
+  let raf = 0;
+  function burst(fromY) {
+    if (reduce) return;
+    cancelAnimationFrame(raf);
+    const c = $('confetti');
+    const ctx = c.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = window.innerWidth, H = window.innerHeight;
+    c.width = W * dpr; c.height = H * dpr;
+    ctx.scale(dpr, dpr);
+    const colors = ['#FFB627', '#D9A93A', '#B3273B', '#F3E6C4', '#7A9CD6', '#FFFFFF'];
+    const parts = Array.from({ length: 170 }, () => ({
+      x: W / 2, y: H * (fromY || 0.5),
+      vx: (Math.random() - 0.5) * 16,
+      vy: -(6 + Math.random() * 11),
+      w: 6 + Math.random() * 6,
+      h: 10 + Math.random() * 8,
+      r: Math.random() * 6.28,
+      vr: (Math.random() - 0.5) * 0.3,
+      col: colors[Math.floor(Math.random() * colors.length)]
+    }));
+    const start = performance.now();
+    (function frame(now) {
+      ctx.clearRect(0, 0, W, H);
+      parts.forEach((p) => {
+        p.vy += 0.26; p.vx *= 0.99; p.vy *= 0.995;
+        p.x += p.vx; p.y += p.vy; p.r += p.vr;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.r);
+        ctx.fillStyle = p.col;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+      if (now - start < 4200) raf = requestAnimationFrame(frame);
+      else ctx.clearRect(0, 0, W, H);
+    })(start);
+  }
+
+  /* Blow out the candles */
+  let lit = false;
+  $('cake').addEventListener('click', () => {
+    if (lit) return;
+    lit = true;
+    document.documentElement.classList.add('lit');
+    $('cake').setAttribute('aria-label', 'Candles blown out');
+    $('reveal').hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => $('reveal').classList.add('in')));
+    burst(0.5);
+    setTimeout(() => {
+      if (window.scrollY < 40) {
+        $('reveal').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      }
+    }, 2600);
+  });
+
+  /* Cupcake opens the surprise */
+  let opened = false;
+  $('cupcake').addEventListener('click', () => {
+    if (opened) return;
+    opened = true;
+    const cup = $('cupcake');
+    cup.classList.add('gone');
+    setTimeout(() => {
+      cup.style.display = 'none';
+      const s = $('surprise');
+      s.hidden = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => s.classList.add('open')));
+      burst(0.5);
+      setTimeout(() => s.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }), 300);
+    }, reduce ? 0 : 300);
+  });
+</script>
 </body>
 </html>
